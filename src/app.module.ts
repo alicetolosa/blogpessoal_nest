@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Postagem } from './postagem/entities/postagem.entity';
 import { PostagemModule } from './postagem/postagem.modules';
 
+
 @Module({  // configuração do modulo nest 
   imports: [
     TypeOrmModule.forRoot({
