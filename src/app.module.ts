@@ -3,21 +3,23 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Postagem } from './postagem/entities/postagem.entity';
+import { PostagemModule } from './postagem/postagem.modules';
 
-@Module({
+@Module({  // configuração do modulo nest 
   imports: [
     TypeOrmModule.forRoot({
-      type: 'mysql', //tipo do banco de dados
-      host: 'localhost', //local do banco de daos
-      port: 3306,
-      username: 'root',
-      password: 'root',
-      database: 'db_blogpessoal', //nome do banco de dados construido
+      type: 'mysql',  // type of database
+      host: 'localhost', // host of database
+      port: 3306, // port of database
+      username: 'root', // username of database
+      password: 'root', // password of database
+      database: 'db_blogpessoal', // name of database
       entities: [Postagem],
       synchronize: true
-  })
-],
-  controllers: [AppController],
-  providers: [AppService],
+    }),
+    PostagemModule // importação do modulo postagem para ser utilizado no modulo nest
+  ],
+  controllers: [AppController],  // configuração dos controladores
+  providers: [AppService], // configuração dos providers 
 })
-export class AppModule {}
+export class AppModule {} // exportação do modulo nest
