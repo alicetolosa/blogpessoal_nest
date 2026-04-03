@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { ILike, Repository, DeleteResult } from "typeorm";
 import { Postagem } from "../entities/postagem.entity";
 import { InjectRepository } from "@nestjs/typeorm";
-import { promises } from "dns";
+import { TemaService } from "../../tema/services/tema.service";
 
 
 
@@ -14,12 +14,18 @@ export class PostagemService {
 
     constructor(
         @InjectRepository(Postagem) // Injeção de dependência, recebe o repositório de postagem
-        private postagemRepository: Repository<Postagem> // Injeção de dependência
+        private postagemRepository: Repository<Postagem>,// Injeção de dependência
+        private temaService: TemaService
     ){}
     
-    //>>>>>>>>>>>>verificar findalltitulo
+  
     async findAll(): Promise<Postagem[]>{ // Promise é uma função assíncrona 
-       return await this.postagemRepository.find(); // select * from tb_postagem;
+       return await this.postagemRepository.find({
+            relations: {
+                tema:  true 
+            }
+       }); // select * from tb_postagem;
+       
     }   
 
     async findById(id: number): Promise<Postagem> {
@@ -42,13 +48,18 @@ export class PostagemService {
             }
         })
     }
-
+    ///aqui
     async create (postagem: Postagem):  Promise <Postagem> {
+        await this.temaService.findById(postagem.tema.id)
+        
         return await this.postagemRepository.save(postagem);
-    }
 
+    }
+    ///aqui
     async update (postagem: Postagem): Promise<Postagem> {
         await this.findById(postagem.id)
+
+        await this.temaService.findById(postagem.tema.id)
 
         return await this.postagemRepository.save(postagem)
     }
