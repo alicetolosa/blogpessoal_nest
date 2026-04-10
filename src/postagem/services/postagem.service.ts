@@ -21,8 +21,9 @@ export class PostagemService {
   
     async findAll(): Promise<Postagem[]>{ // Promise é uma função assíncrona 
        return await this.postagemRepository.find({
-            relations: {
-                tema:  true 
+            relations: { //Relação entre tema e usuario 
+                tema:  true,  
+                usuario: true
             }
        }); // select * from tb_postagem;
        
@@ -49,19 +50,58 @@ export class PostagemService {
         })
     }
     ///aqui
-    async create (postagem: Postagem):  Promise <Postagem> {
+    /*async create (postagem: Postagem):  Promise <Postagem> {
         await this.temaService.findById(postagem.tema.id)
         
         return await this.postagemRepository.save(postagem);
 
+    }*/
+
+    async create(postagem: Postagem): Promise<Postagem> {
+       
+        if (postagem.tema != null) {
+           
+            let tema = await this.temaService.findById(postagem.tema.id)
+ 
+            if (!tema)
+                throw new HttpException('Tema não encontrado!', HttpStatus.NOT_FOUND);
+ 
+              return await this.postagemRepository.save(postagem);
+        }else{
+            throw new HttpException('Tema nao pode ser nulo!', HttpStatus.NOT_FOUND);
+        }
+   
     }
+
     ///aqui
-    async update (postagem: Postagem): Promise<Postagem> {
+    /*async update (postagem: Postagem): Promise<Postagem> {
         await this.findById(postagem.id)
 
         await this.temaService.findById(postagem.tema.id)
 
         return await this.postagemRepository.save(postagem)
+    }*/
+
+    async update(postagem: Postagem): Promise<Postagem> {
+       
+        let buscaPostagem: Postagem = await this.findById(postagem.id);
+ 
+        if (!buscaPostagem || !postagem.id)
+            throw new HttpException('Postagem não encontrada!', HttpStatus.NOT_FOUND);
+ 
+        if (postagem.tema){
+           
+            let tema = await this.temaService.findById(postagem.tema.id)
+               
+            if (!tema)
+                throw new HttpException('Tema não encontrado!', HttpStatus.NOT_FOUND);
+               
+            return await this.postagemRepository.save(postagem);
+   
+        }else{
+            throw new HttpException('Tema nao pode ser nulo!', HttpStatus.NOT_FOUND);
+        }
+       
     }
 
     async delete(id: number): Promise<DeleteResult>{
