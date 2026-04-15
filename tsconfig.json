@@ -3,6 +3,7 @@
     "module": "nodenext",
     "moduleResolution": "nodenext",
     "resolvePackageJsonExports": true,
+    "types": ["jest"],//habilitado para reconhcer a paste do arq. usuario
     "esModuleInterop": true,
     "isolatedModules": true,
     "declaration": true,

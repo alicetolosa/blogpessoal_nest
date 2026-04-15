@@ -2,46 +2,53 @@ import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, ParseIntPip
 import { Tema } from "../entities/tema.entity";
 import { TemaService } from "../services/tema.service";
 import { JwtAuthGuard } from "../../auth/guard/jwt-auth.guard";
+import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 
+@ApiTags('Tema')
 @UseGuards(JwtAuthGuard)
 @Controller("/temas")
+@ApiBearerAuth()
 export class TemaController {
-  constructor(private readonly temaService: TemaService) { }
+    constructor(private readonly temaService: TemaService) { }
 
-  @Get()
-  @HttpCode(HttpStatus.OK)
-  findAll(): Promise<Tema[]> {
-    return this.temaService.findAll();
-  }
 
-  @Get('/:id')
-  @HttpCode(HttpStatus.OK)
-  findById(@Param('id', ParseIntPipe) id: number): Promise<Tema> {
-    return this.temaService.findById(id);
-  }
+    @Get()
+    @HttpCode(HttpStatus.OK)
+    findAll(): Promise<Tema[]> {
+        return this.temaService.findAll();
 
-  @Get('/descricao/:descricao')
-  @HttpCode(HttpStatus.OK)
-  findAllBydescricao(@Param('descricao') descricao: string): Promise<Tema[]> {
-    return this.temaService.findAllByDescricao(descricao);
-  }
+    }
 
-  @Post()
-  @HttpCode(HttpStatus.CREATED)
-  create(@Body() tema: Tema): Promise<Tema> {
-    return this.temaService.create(tema);
-  }
+    @Get('/:id')
+    @HttpCode(HttpStatus.OK)
+    findById(@Param('id', ParseIntPipe) id: number): Promise<Tema> {
 
-  @Put()
-  @HttpCode(HttpStatus.OK)
-  update(@Body() tema: Tema): Promise<Tema> {
-    return this.temaService.update(tema);
-  }
+        return this.temaService.findById(id);
+    }
 
-  @Delete('/:id')
-  @HttpCode(HttpStatus.NO_CONTENT)
-  delete(@Param('id', ParseIntPipe) id: number){
-    return this.temaService.delete(id);
-  }
+    @Get('/descricao/:descricao')
+    @HttpCode(HttpStatus.OK)
+    findAllBydescricao(@Param('descricao') descricao: string): Promise<Tema[]> {
+        return this.temaService.findAllByDescricao(descricao);
+    }
 
+    @Post()
+    @HttpCode(HttpStatus.CREATED)
+    create(@Body() tema: Tema): Promise<Tema> {
+        return this.temaService.create(tema);
+    }
+
+    @Put()
+    @HttpCode(HttpStatus.OK)
+    update(@Body() tema: Tema): Promise<Tema> {
+        return this.temaService.update(tema);
+
+    }
+
+    @Delete('/:id')
+    @HttpCode(HttpStatus.NO_CONTENT)
+    delete(@Param('id', ParseIntPipe) id: number) {
+        return this.temaService.delete(id);
+    }
 }
+
