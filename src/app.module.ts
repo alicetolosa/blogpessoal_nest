@@ -11,6 +11,7 @@ import { UsuarioModule } from './usuario/usuario.module';
 import { Usuario } from './usuario/entities/usuario.entity';
 import { ConfigModule } from '@nestjs/config';
 import { ProdService } from './data/service/prod.service';
+import { DevService } from './data/service/dev.service';
 
 
 @Module({  // configuração do modulo nest 
